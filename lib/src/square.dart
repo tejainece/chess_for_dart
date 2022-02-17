@@ -1,8 +1,17 @@
-
-
 class File {
   final String notation;
   const File._(this.notation);
+
+  factory File.parse(String notation) {
+    notation = notation.toLowerCase();
+    for(final file in files) {
+      if(file.notation == notation) {
+        return file;
+      }
+    }
+
+    throw Exception('invalid file notation $notation');
+  }
 
   int get index => notation.codeUnitAt(0) - a.notation.codeUnitAt(0);
 
@@ -21,6 +30,18 @@ class File {
 class Rank {
   final String notation;
   const Rank._(this.notation);
+
+  factory Rank.parse(String notation) {
+    notation = notation.toLowerCase();
+    for(final rank in ranks) {
+      if(rank.notation == notation) {
+        return rank;
+      }
+    }
+
+    throw Exception('invalid rank notation $notation');
+  }
+
   int get index => notation.codeUnitAt(0) - one.notation.codeUnitAt(0);
 
   static const one = Rank._('1');
@@ -39,6 +60,17 @@ class Square {
   final File file;
   final Rank rank;
   const Square(this.file, this.rank);
+
+  factory Square.parse(String notation) {
+    final parts = notation.split('');
+    if(parts.length != 2) {
+      throw Exception('invalid square algebraic notation');
+    }
+
+    return Square(File.parse(parts[0]), Rank.parse(parts[1]));
+  }
+
+  String get notation => '${file.notation}${rank.notation}';
 
   static const a1 = Square(File.a, Rank.one);
   static const a2 = Square(File.a, Rank.two);

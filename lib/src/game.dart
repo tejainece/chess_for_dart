@@ -4,7 +4,27 @@ import 'package:chess_for_dart/src/square.dart';
 class Board {
   final List<List<Piece?>> _board;
 
-  Board._(this._board);
+  /// Which side is to move next
+  Side turn;
+
+  bool canWhiteCastleKingSide;
+  bool canWhiteCastleQueenSide;
+  bool canBlackCastleKingSide;
+  bool canBlackCastleQueenSide;
+
+  // TODO enPassant
+  // TODO halfMoveClock
+  // TODO fullMoveClock
+  // TODO repetition
+
+  Board._(
+      {required List<List<Piece?>> board,
+      required this.turn,
+      this.canWhiteCastleKingSide = true,
+      this.canWhiteCastleQueenSide = true,
+      this.canBlackCastleKingSide = true,
+      this.canBlackCastleQueenSide = true})
+      : _board = board;
 
   factory Board.make(List<List<Piece?>> board) {
     if (board.length != 8) {
@@ -18,7 +38,8 @@ class Board {
 
     // TODO validate board
 
-    return Board._(board.map((e) => e.toList()).toList());
+    throw UnimplementedError();
+    // TODO return Board._(board.map((e) => e.toList()).toList());
   }
 
   Piece? operator [](Square square) =>
@@ -49,7 +70,7 @@ class Board {
 }
 
 class Move {
-  final Color turn;
+  final Side turn;
   final PieceType piece;
   final Square position;
   Move(this.turn, this.piece, this.position);
