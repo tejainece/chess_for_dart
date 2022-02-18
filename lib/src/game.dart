@@ -1,49 +1,106 @@
+import 'package:chess_for_dart/src/fen_parser.dart';
 import 'package:chess_for_dart/src/piece.dart';
 import 'package:chess_for_dart/src/square.dart';
 
 class Board {
+  final FEN starting;
+
   final List<List<Piece?>> _board;
 
   /// Which side is to move next
-  Side turn;
+  Side _turn;
 
-  bool canWhiteCastleKingSide;
-  bool canWhiteCastleQueenSide;
-  bool canBlackCastleKingSide;
-  bool canBlackCastleQueenSide;
+  bool _canWhiteCastleKingSide;
+  bool _canWhiteCastleQueenSide;
+  bool _canBlackCastleKingSide;
+  bool _canBlackCastleQueenSide;
 
-  // TODO enPassant
-  // TODO halfMoveClock
-  // TODO fullMoveClock
+  Square? _enPassant;
+  int _halfMoveClock;
+  int _fullMoveClock;
   // TODO repetition
 
   Board._(
-      {required List<List<Piece?>> board,
-      required this.turn,
-      this.canWhiteCastleKingSide = true,
-      this.canWhiteCastleQueenSide = true,
-      this.canBlackCastleKingSide = true,
-      this.canBlackCastleQueenSide = true})
-      : _board = board;
+      {required this.starting,
+      required List<List<Piece?>> board,
+      required Side turn,
+      required bool canWhiteCastleKingSide,
+      required bool canWhiteCastleQueenSide,
+      required bool canBlackCastleKingSide,
+      required bool canBlackCastleQueenSide,
+      required Square? enPassant,
+      required int halfMoveClock,
+      required int fullMoveClock})
+      : _board = board,
+        _turn = turn,
+        _canWhiteCastleKingSide = canWhiteCastleKingSide,
+        _canWhiteCastleQueenSide = canWhiteCastleQueenSide,
+        _canBlackCastleKingSide = canBlackCastleKingSide,
+        _canBlackCastleQueenSide = canBlackCastleQueenSide,
+        _enPassant = enPassant,
+        _halfMoveClock = halfMoveClock,
+        _fullMoveClock = fullMoveClock;
 
-  factory Board.make(List<List<Piece?>> board) {
-    if (board.length != 8) {
-      throw Exception('invalid number of ranks');
-    }
-    for (int i = 0; i < 8; i++) {
-      if (board[i].length != 8) {
-        throw Exception('invalid number of files in rank $i');
-      }
-    }
+  factory Board() => Board.fromFEN(FEN.starting);
 
-    // TODO validate board
-
-    throw UnimplementedError();
-    // TODO return Board._(board.map((e) => e.toList()).toList());
+  factory Board.fromFEN(FEN fen) {
+    return Board._(
+        starting: fen,
+        board: fen.board.map((e) => e.toList()).toList(),
+        turn: fen.turn,
+        canWhiteCastleKingSide: fen.canWhiteCastleKingSide,
+        canWhiteCastleQueenSide: fen.canWhiteCastleQueenSide,
+        canBlackCastleKingSide: fen.canBlackCastleKingSide,
+        canBlackCastleQueenSide: fen.canBlackCastleQueenSide,
+        enPassant: fen.enPassant,
+        halfMoveClock: fen.halfMoveClock,
+        fullMoveClock: fen.fullMoveClock);
   }
+
+  Side get turn => _turn;
+  bool get canWhiteCastleKingSide => _canWhiteCastleKingSide;
+  bool get canWhiteCastleQueenSide => _canWhiteCastleQueenSide;
+  bool get canBlackCastleKingSide => _canBlackCastleKingSide;
+  bool get canBlackCastleQueenSide => _canBlackCastleQueenSide;
+  Square? get enPassant => _enPassant;
+  int get halfMoveClock => _halfMoveClock;
+  int get fullMoveClock => _fullMoveClock;
 
   Piece? operator [](Square square) =>
       _board[square.rank.index][square.file.index];
+
+  void operator []=(Square square, Piece? piece) =>
+      _board[square.rank.index][square.file.index] = piece;
+
+  void move(Move move) {
+    if (move.turn != turn) {
+      throw Exception("it is not ${move.turn.name}'s turn");
+    }
+    final piece = this[move.departure];
+    if (piece == null) {
+      throw Exception('piece was not found');
+    }
+    if (piece.type != move.piece) {
+      throw Exception('piece was not found');
+    }
+    // TODO check validity of the move
+    final target = this[move.destination];
+    if(move.capture) {
+      if(target == null) {
+        throw Exception('destination is not occupied for capturing move');
+      }
+    } else {
+      if(target != null) {
+        throw Exception('destination is occupied for non-capture move');
+      }
+    }
+    this[move.departure] = null;
+    this[move.destination] = piece;
+    // TODO promotion?
+    // TODO update enPassant
+    // TODO update halfMoveClock
+    // TODO update fullMoveClock
+  }
 
   String ascii({bool flip = false}) {
     final sb = StringBuffer();
@@ -72,6 +129,17 @@ class Board {
 class Move {
   final Side turn;
   final PieceType piece;
-  final Square position;
-  Move(this.turn, this.piece, this.position);
+  final Square departure;
+  final Square destination;
+  final bool capture;
+
+  Move(
+      {required this.turn,
+      required this.piece,
+      required this.departure,
+      required this.destination,
+      required this.capture});
+
+  String notation() =>
+      '${piece.notation.toUpperCase()}${departure.notation}${capture ? 'x' : ''}${destination.notation}';
 }

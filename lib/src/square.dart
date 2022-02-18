@@ -81,14 +81,14 @@ class Square {
   static const a7 = Square(File.a, Rank.seven);
   static const a8 = Square(File.a, Rank.eight);
 
-  static const b1 = Square(File.a, Rank.one);
-  static const b2 = Square(File.a, Rank.two);
-  static const b3 = Square(File.a, Rank.three);
-  static const b4 = Square(File.a, Rank.four);
-  static const b5 = Square(File.a, Rank.five);
-  static const b6 = Square(File.a, Rank.six);
-  static const b7 = Square(File.a, Rank.seven);
-  static const b8 = Square(File.a, Rank.eight);
+  static const b1 = Square(File.b, Rank.one);
+  static const b2 = Square(File.b, Rank.two);
+  static const b3 = Square(File.b, Rank.three);
+  static const b4 = Square(File.b, Rank.four);
+  static const b5 = Square(File.b, Rank.five);
+  static const b6 = Square(File.b, Rank.six);
+  static const b7 = Square(File.b, Rank.seven);
+  static const b8 = Square(File.b, Rank.eight);
 
   static const c1 = Square(File.c, Rank.one);
   static const c2 = Square(File.c, Rank.two);

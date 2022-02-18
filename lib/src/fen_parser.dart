@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:chess_for_dart/src/piece.dart';
 import 'package:chess_for_dart/src/square.dart';
 
@@ -5,19 +7,19 @@ class FEN {
   final List<List<Piece?>> board;
 
   /// Which side is to move next
-  Side turn;
+  final Side turn;
 
-  bool canWhiteCastleKingSide;
-  bool canWhiteCastleQueenSide;
-  bool canBlackCastleKingSide;
-  bool canBlackCastleQueenSide;
+  final bool canWhiteCastleKingSide;
+  final bool canWhiteCastleQueenSide;
+  final bool canBlackCastleKingSide;
+  final bool canBlackCastleQueenSide;
 
-  Square? enPassant;
-  int halfMoveClock;
-  int fullMoveClock;
+  final Square? enPassant;
+  final int halfMoveClock;
+  final int fullMoveClock;
   // TODO repetition
 
-  FEN(
+  const FEN(
       {required this.board,
       required this.turn,
       required this.enPassant,
@@ -81,20 +83,20 @@ class FEN {
   String encodeCastling() {
     final sb = StringBuffer();
 
-    if(canWhiteCastleKingSide) {
+    if (canWhiteCastleKingSide) {
       sb.write('K');
     }
-    if(canWhiteCastleQueenSide) {
+    if (canWhiteCastleQueenSide) {
       sb.write('Q');
     }
-    if(canBlackCastleKingSide) {
+    if (canBlackCastleKingSide) {
       sb.write('k');
     }
-    if(canBlackCastleQueenSide) {
+    if (canBlackCastleQueenSide) {
       sb.write('q');
     }
 
-    return sb.isEmpty? '-': sb.toString();
+    return sb.isEmpty ? '-' : sb.toString();
   }
 
   String encode() {
@@ -123,7 +125,7 @@ class FEN {
       throw Exception('invalid FEN: expected 8 ranks in piece placement');
     }
 
-    return rankPlacement.map(parseRank).toList().reversed.toList();
+    return List.unmodifiable(rankPlacement.map(parseRank).toList().reversed);
   }
 
   static List<Piece?> parseRank(String rankPlacement) {
@@ -149,7 +151,7 @@ class FEN {
       throw Exception('invalid FEN: rank rank should have exactly 8 files');
     }
 
-    return ret;
+    return List.unmodifiable(ret);
   }
 
   static String encodeBoardPlacement(List<List<Piece?>> board) =>
@@ -178,4 +180,62 @@ class FEN {
 
     return sb.toString();
   }
+
+  static const starting = FEN(
+      board: startingBoard,
+      turn: Side.white,
+      enPassant: null,
+      canWhiteCastleKingSide: true,
+      canWhiteCastleQueenSide: true,
+      canBlackCastleKingSide: true,
+      canBlackCastleQueenSide: true,
+      halfMoveClock: 0,
+      fullMoveClock: 0);
+
+  static const startingBoard = [
+    [
+      Piece.whiteRook,
+      Piece.whiteKnight,
+      Piece.whiteBishop,
+      Piece.whiteQueen,
+      Piece.whiteKing,
+      Piece.whiteBishop,
+      Piece.whiteKnight,
+      Piece.whiteRook
+    ],
+    [
+      Piece.whitePawn,
+      Piece.whitePawn,
+      Piece.whitePawn,
+      Piece.whitePawn,
+      Piece.whitePawn,
+      Piece.whitePawn,
+      Piece.whitePawn,
+      Piece.whitePawn
+    ],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [
+      Piece.blackPawn,
+      Piece.blackPawn,
+      Piece.blackPawn,
+      Piece.blackPawn,
+      Piece.blackPawn,
+      Piece.blackPawn,
+      Piece.blackPawn,
+      Piece.blackPawn
+    ],
+    [
+      Piece.blackRook,
+      Piece.blackKnight,
+      Piece.blackBishop,
+      Piece.blackQueen,
+      Piece.blackKing,
+      Piece.blackBishop,
+      Piece.blackKnight,
+      Piece.blackRook
+    ],
+  ];
 }
