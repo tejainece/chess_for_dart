@@ -13,6 +13,13 @@ class File {
     throw Exception('invalid file notation $notation');
   }
 
+  factory File.byIndex(int index) {
+    if(index < 0 || index > 7) {
+      throw Exception('invalid file index $index');
+    }
+    return files[index];
+  }
+
   int get index => notation.codeUnitAt(0) - a.notation.codeUnitAt(0);
 
   static const a = File._('a');
@@ -40,6 +47,13 @@ class Rank {
     }
 
     throw Exception('invalid rank notation $notation');
+  }
+
+  factory Rank.byIndex(int index) {
+    if(index < 0 || index > 7) {
+      throw Exception('invalid tank index $index');
+    }
+    return ranks[index];
   }
 
   int get index => notation.codeUnitAt(0) - one.notation.codeUnitAt(0);

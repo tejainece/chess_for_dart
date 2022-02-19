@@ -1,7 +1,8 @@
-import 'dart:collection';
-
 import 'package:chess_for_dart/src/piece.dart';
 import 'package:chess_for_dart/src/square.dart';
+
+export 'package:chess_for_dart/src/piece.dart';
+export 'package:chess_for_dart/src/square.dart';
 
 class FEN {
   final List<List<Piece?>> board;
@@ -194,48 +195,48 @@ class FEN {
 
   static const startingBoard = [
     [
-      Piece.whiteRook,
-      Piece.whiteKnight,
-      Piece.whiteBishop,
-      Piece.whiteQueen,
-      Piece.whiteKing,
-      Piece.whiteBishop,
-      Piece.whiteKnight,
-      Piece.whiteRook
+      whiteRook,
+      whiteKnight,
+      whiteBishop,
+      whiteQueen,
+      whiteKing,
+      whiteBishop,
+      whiteKnight,
+      whiteRook
     ],
     [
-      Piece.whitePawn,
-      Piece.whitePawn,
-      Piece.whitePawn,
-      Piece.whitePawn,
-      Piece.whitePawn,
-      Piece.whitePawn,
-      Piece.whitePawn,
-      Piece.whitePawn
+      whitePawn,
+      whitePawn,
+      whitePawn,
+      whitePawn,
+      whitePawn,
+      whitePawn,
+      whitePawn,
+      whitePawn
     ],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [
-      Piece.blackPawn,
-      Piece.blackPawn,
-      Piece.blackPawn,
-      Piece.blackPawn,
-      Piece.blackPawn,
-      Piece.blackPawn,
-      Piece.blackPawn,
-      Piece.blackPawn
+      blackPawn,
+      blackPawn,
+      blackPawn,
+      blackPawn,
+      blackPawn,
+      blackPawn,
+      blackPawn,
+      blackPawn
     ],
     [
-      Piece.blackRook,
-      Piece.blackKnight,
-      Piece.blackBishop,
-      Piece.blackQueen,
-      Piece.blackKing,
-      Piece.blackBishop,
-      Piece.blackKnight,
-      Piece.blackRook
+      blackRook,
+      blackKnight,
+      blackBishop,
+      blackQueen,
+      blackKing,
+      blackBishop,
+      blackKnight,
+      blackRook
     ],
   ];
 }

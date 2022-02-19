@@ -1,75 +1,19 @@
-class PieceType {
-  final String notation;
-  final String name;
-  const PieceType._internal(this.notation, this.name);
+import 'package:chess_for_dart/src/piece_type.dart';
 
-  static const PieceType king = PieceType._internal('k', 'King');
-  static const PieceType queen = PieceType._internal('q', 'Queen');
-  static const PieceType rook = PieceType._internal('r', 'Rook');
-  static const PieceType bishop = PieceType._internal('b', 'Bishop');
-  static const PieceType knight = PieceType._internal('n', 'Knight');
-  static const PieceType pawn = PieceType._internal('p', 'Pawn');
+export 'package:chess_for_dart/src/piece_type.dart';
 
-  static const notationMap = {
-    'k': king,
-    'q': queen,
-    'r': rook,
-    'b': bishop,
-    'n': knight,
-    'p': pawn,
-  };
+abstract class Piece {
+  PieceType get type;
+  Side get color;
+  String get symbol;
 
-  static PieceType? fromNotation(String symbol) =>
-      notationMap[symbol.toLowerCase()];
-
-  @override
-  bool operator ==(Object other) {
-    late String otherNotation;
-    if (other is PieceType) {
-      otherNotation = other.toLowerCase();
-    } else if (other is String) {
-      otherNotation = other.toLowerCase();
-    } else {
-      return false;
-    }
-    return otherNotation == notation;
-  }
-
-  @override
-  int get hashCode => notation.codeUnitAt(0);
-
-  @override
-  String toString() => name;
-  String toLowerCase() => notation;
-  String toUpperCase() => notation.toUpperCase();
-}
-
-enum Side { white, black }
-
-class Piece {
-  final PieceType type;
-  final Side color;
-  final String symbol;
-  const Piece._(this.type, this.color, this.symbol);
+  const Piece();
 
   String get notation =>
       color == Side.white ? type.toUpperCase() : type.toLowerCase();
 
   @override
   String toString() => symbol;
-
-  static const whiteKing = Piece._(PieceType.king, Side.white, '\u2654');
-  static const blackKing = Piece._(PieceType.king, Side.black, '\u265A');
-  static const whiteQueen = Piece._(PieceType.queen, Side.white, '\u2655');
-  static const blackQueen = Piece._(PieceType.queen, Side.black, '\u265B');
-  static const whiteRook = Piece._(PieceType.rook, Side.white, '\u2656');
-  static const blackRook = Piece._(PieceType.rook, Side.black, '\u265C');
-  static const whiteBishop = Piece._(PieceType.bishop, Side.white, '\u2657');
-  static const blackBishop = Piece._(PieceType.bishop, Side.black, '\u265D');
-  static const whiteKnight = Piece._(PieceType.knight, Side.white, '\u2658');
-  static const blackKnight = Piece._(PieceType.knight, Side.black, '\u265E');
-  static const whitePawn = Piece._(PieceType.pawn, Side.white, '\u2659');
-  static const blackPawn = Piece._(PieceType.pawn, Side.black, '\u265F');
 
   static const notationMap = {
     'K': whiteKing,
@@ -85,4 +29,159 @@ class Piece {
     'P': whitePawn,
     'p': blackPawn,
   };
+}
+
+abstract class WhitePiece implements Piece {
+  @override
+  Side get color => Side.white;
+}
+
+abstract class BlackPiece implements Piece {
+  @override
+  Side get color => Side.black;
+}
+
+const whiteKing = WhiteKing._();
+const blackKing = BlackKing._();
+const whiteQueen = WhiteQueen._();
+const blackQueen = BlackQueen._();
+const whiteRook = WhiteRook._();
+const blackRook = BlackRook._();
+const whiteBishop = WhiteBishop._();
+const blackBishop = BlackBishop._();
+const whiteKnight = WhiteKnight._();
+const blackKnight = BlackKnight._();
+const whitePawn = WhitePawn._();
+const blackPawn = BlackPawn._();
+
+class WhiteKing extends Piece with WhitePiece {
+  @override
+  final type = PieceType.king;
+  @override
+  final symbol = '♔';
+
+  const WhiteKing._();
+
+  factory WhiteKing() => whiteKing;
+}
+
+class BlackKing extends Piece with BlackPiece {
+  @override
+  final type = PieceType.king;
+  @override
+  final symbol = '♚';
+
+  const BlackKing._();
+
+  factory BlackKing() => blackKing;
+}
+
+class WhiteQueen extends Piece with WhitePiece {
+  @override
+  final type = PieceType.queen;
+  @override
+  final symbol = '♕';
+
+  const WhiteQueen._();
+
+  factory WhiteQueen() => whiteQueen;
+}
+
+class BlackQueen extends Piece with BlackPiece {
+  @override
+  final type = PieceType.queen;
+  @override
+  final symbol = '♛';
+
+  const BlackQueen._();
+
+  factory BlackQueen() => blackQueen;
+}
+
+class WhiteRook extends Piece with WhitePiece {
+  @override
+  final type = PieceType.rook;
+  @override
+  final symbol = '♖';
+
+  const WhiteRook._();
+
+  factory WhiteRook() => whiteRook;
+}
+
+class BlackRook extends Piece with BlackPiece {
+  @override
+  final type = PieceType.rook;
+  @override
+  final symbol = '♜';
+
+  const BlackRook._();
+
+  factory BlackRook() => blackRook;
+}
+
+class WhiteBishop extends Piece with WhitePiece {
+  @override
+  final type = PieceType.bishop;
+  @override
+  final symbol = '♗';
+
+  const WhiteBishop._();
+
+  factory WhiteBishop() => whiteBishop;
+}
+
+class BlackBishop extends Piece with BlackPiece {
+  @override
+  final type = PieceType.bishop;
+  @override
+  final symbol = '♝';
+
+  const BlackBishop._();
+
+  factory BlackBishop() => blackBishop;
+}
+
+class WhiteKnight extends Piece with WhitePiece {
+  @override
+  final type = PieceType.knight;
+  @override
+  final symbol = '♘';
+
+  const WhiteKnight._();
+
+  factory WhiteKnight() => whiteKnight;
+}
+
+class BlackKnight extends Piece with BlackPiece {
+  @override
+  final type = PieceType.knight;
+  @override
+  final symbol = '♞';
+
+  const BlackKnight._();
+
+  factory BlackKnight() => blackKnight;
+}
+
+class WhitePawn extends Piece with WhitePiece {
+  @override
+  final type = PieceType.pawn;
+  @override
+  final symbol = '♙';
+
+  const WhitePawn._();
+
+  factory WhitePawn() => whitePawn;
+}
+
+class BlackPawn extends Piece with BlackPiece {
+  @override
+  final type = PieceType.pawn;
+  @override
+  final symbol = '♟';
+
+  const BlackPawn._();
+
+  factory BlackPawn() => blackPawn;
 }

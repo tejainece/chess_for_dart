@@ -1,6 +1,4 @@
 import 'package:chess_for_dart/src/fen_parser.dart';
-import 'package:chess_for_dart/src/piece.dart';
-import 'package:chess_for_dart/src/square.dart';
 
 class Board {
   final FEN starting;
