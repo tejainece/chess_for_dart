@@ -1,4 +1,5 @@
 import 'package:chess_for_dart/chess_for_dart.dart';
+import 'package:chess_for_dart/src/square.dart';
 
 enum Side { white, black }
 
@@ -309,7 +310,72 @@ class Pawn with PieceType {
 
     // TODO if king is under check, only moves that prevent all checks are legal moves
 
-    throw UnimplementedError();
+    if (departure.rank == Rank.eight) {
+      // This should not be possible!
+      return ret;
+    }
+
+    final captureSquares =
+        Direction.whitePawnCaptures.map((e) => departure + e);
+    for (final tracker in captureSquares) {
+      if (tracker != null) {
+        final piece = board[tracker];
+        if (piece != null && piece.color != Side.white) {
+          // TODO promotion
+          ret.add(Move(
+              turn: Side.white,
+              piece: this,
+              departure: departure,
+              destination: tracker,
+              capture: true));
+        }
+      }
+    }
+
+    if (board.enPassant != null) {
+      final Square enPassant = board.enPassant!;
+      if (captureSquares.contains(enPassant)) {
+        ret.add(Move(
+            turn: Side.white,
+            piece: this,
+            departure: departure,
+            destination: enPassant,
+            capture: true));
+      }
+    }
+
+    {
+      Square tracker = (departure + Direction.n)!;
+      final piece = board[tracker];
+      if (piece != null) {
+        return ret;
+      }
+      // TODO promotion
+      ret.add(Move(
+          turn: Side.white,
+          piece: this,
+          departure: departure,
+          destination: tracker,
+          capture: false));
+    }
+
+    if (departure.rank == Rank.two) {
+      final tracker = (departure + Direction.n)! + Direction.n;
+      if (tracker != null) {
+        final piece = board[tracker];
+        if (piece != null) {
+          return ret;
+        }
+        ret.add(Move(
+            turn: Side.white,
+            piece: this,
+            departure: departure,
+            destination: tracker,
+            capture: false));
+      }
+    }
+
+    return ret;
   }
 
   List<Move> findMovesBlack(Board board, Square departure) {
@@ -317,7 +383,72 @@ class Pawn with PieceType {
 
     // TODO if king is under check, only moves that prevent all checks are legal moves
 
-    throw UnimplementedError();
+    if (departure.rank == Rank.one) {
+      // This should not be possible!
+      return ret;
+    }
+
+    final captureSquares =
+        Direction.blackPawnCaptures.map((e) => departure + e);
+    for (final tracker in captureSquares) {
+      if (tracker != null) {
+        final piece = board[tracker];
+        if (piece != null && piece.color != Side.black) {
+          // TODO promotion
+          ret.add(Move(
+              turn: Side.black,
+              piece: this,
+              departure: departure,
+              destination: tracker,
+              capture: true));
+        }
+      }
+    }
+
+    if (board.enPassant != null) {
+      final Square enPassant = board.enPassant!;
+      if (captureSquares.contains(enPassant)) {
+        ret.add(Move(
+            turn: Side.black,
+            piece: this,
+            departure: departure,
+            destination: enPassant,
+            capture: true));
+      }
+    }
+
+    {
+      Square tracker = (departure + Direction.s)!;
+      final piece = board[tracker];
+      if (piece != null) {
+        return ret;
+      }
+      // TODO promotion
+      ret.add(Move(
+          turn: Side.black,
+          piece: this,
+          departure: departure,
+          destination: tracker,
+          capture: false));
+    }
+
+    if (departure.rank == Rank.two) {
+      final tracker = (departure + Direction.s)! + Direction.s;
+      if (tracker != null) {
+        final piece = board[tracker];
+        if (piece != null) {
+          return ret;
+        }
+        ret.add(Move(
+            turn: Side.black,
+            piece: this,
+            departure: departure,
+            destination: tracker,
+            capture: false));
+      }
+    }
+
+    return ret;
   }
 
   @override

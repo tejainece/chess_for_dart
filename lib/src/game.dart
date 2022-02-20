@@ -95,7 +95,7 @@ class Board {
     this[move.departure] = null;
     this[move.destination] = piece;
     // TODO promotion?
-    // TODO update enPassant
+    _enPassant = move.enPassant;
 
     _halfMoveClock = move.capture? 0: _halfMoveClock + 1;
 

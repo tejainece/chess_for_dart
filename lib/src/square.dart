@@ -106,6 +106,15 @@ class Square {
     return Square._(File.parse(parts[0]), Rank.parse(parts[1]));
   }
 
+  Square? get n => this + Direction.n;
+  Square? get ne => this + Direction.ne;
+  Square? get e => this + Direction.e;
+  Square? get se => this + Direction.se;
+  Square? get s => this + Direction.s;
+  Square? get sw => this + Direction.sw;
+  Square? get w => this + Direction.w;
+  Square? get nw => this + Direction.nw;
+
   String get notation => '${file.notation}${rank.notation}';
 
   Square? operator +(Direction direction) {
@@ -119,10 +128,6 @@ class Square {
     }
     return Square(newFile, newRank);
   }
-
-  // TODO get ranks
-
-  // TODO get files
 
   static const squares = [
     [a1, b1, c1, d1, e1, f1, g1, h1],
@@ -240,6 +245,9 @@ class Direction {
   static const adjacents = [n, e, s, w];
 
   static const knight = [nne, ene, ese, sse, ssw, wsw, wnw, nnw];
+
+  static const whitePawnCaptures = [ne, nw];
+  static const blackPawnCaptures = [se, sw];
 }
 
 class Move {
@@ -255,6 +263,25 @@ class Move {
       required this.departure,
       required this.destination,
       required this.capture});
+
+  Square? get enPassant {
+    if (piece != PieceType.pawn) {
+      return null;
+    }
+    if (turn == Side.white) {
+      if (departure.rank == Rank.two && destination.rank == Rank.four) {
+        return departure.n;
+      } else {
+        return null;
+      }
+    } else {
+      if (departure.rank == Rank.seven && destination.rank == Rank.five) {
+        return departure.s;
+      } else {
+        return null;
+      }
+    }
+  }
 
   String notation() =>
       '${piece.notation.toUpperCase()}${departure.notation}${capture ? 'x' : ''}${destination.notation}';
