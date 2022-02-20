@@ -38,6 +38,8 @@ class King with PieceType {
   const King._();
 
   factory King() => PieceType.king;
+
+
 }
 
 class Queen with PieceType {

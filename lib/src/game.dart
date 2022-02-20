@@ -83,12 +83,12 @@ class Board {
     }
     // TODO check validity of the move
     final target = this[move.destination];
-    if(move.capture) {
-      if(target == null) {
+    if (move.capture) {
+      if (target == null) {
         throw Exception('destination is not occupied for capturing move');
       }
     } else {
-      if(target != null) {
+      if (target != null) {
         throw Exception('destination is occupied for non-capture move');
       }
     }
@@ -96,8 +96,14 @@ class Board {
     this[move.destination] = piece;
     // TODO promotion?
     // TODO update enPassant
-    // TODO update halfMoveClock
-    // TODO update fullMoveClock
+
+    _halfMoveClock = move.capture? 0: _halfMoveClock + 1;
+
+    if (turn == Side.black) {
+      _fullMoveClock++;
+    }
+
+    _turn = turn == Side.white ? Side.black : Side.white;
   }
 
   String ascii({bool flip = false}) {
