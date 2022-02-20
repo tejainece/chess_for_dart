@@ -2,7 +2,12 @@ import 'dart:math';
 
 import 'package:chess_for_dart/src/piece_type.dart';
 
-class File {
+abstract class Region {
+  String get notation;
+}
+
+class File implements Region {
+  @override
   final String notation;
   const File._(this.notation);
 
@@ -46,7 +51,8 @@ class File {
   static const files = [a, b, c, d, e, f, g, h];
 }
 
-class Rank {
+class Rank implements Region {
+  @override
   final String notation;
   const Rank._(this.notation);
 
@@ -90,7 +96,7 @@ class Rank {
   static const ranks = [one, two, three, four, five, six, seven, eight];
 }
 
-class Square {
+class Square implements Region {
   final File file;
   final Rank rank;
   const Square._(this.file, this.rank);
@@ -115,6 +121,7 @@ class Square {
   Square? get w => this + Direction.w;
   Square? get nw => this + Direction.nw;
 
+  @override
   String get notation => '${file.notation}${rank.notation}';
 
   Square? operator +(Direction direction) {
@@ -285,4 +292,78 @@ class Move {
 
   String notation() =>
       '${piece.notation.toUpperCase()}${departure.notation}${capture ? 'x' : ''}${destination.notation}';
+}
+
+class SAN {
+  final PieceType piece;
+  final Region? departure;
+  final Square destination;
+  final bool capture;
+  final bool check;
+  final bool checkMate;
+  final PieceType? promotion;
+
+  const SAN(
+      {this.piece = PieceType.pawn,
+      this.departure,
+      required this.destination,
+      required this.capture,
+      this.check = false,
+      this.checkMate = false,
+      this.promotion});
+
+  factory SAN.parse(String san) {
+    if(san.startsWith('O-O-O')) {
+      san = san.substring(5);
+    } else if(san.startsWith('O-O')) {
+      san = san.substring(3);
+    } else {
+
+    }
+  }
+
+  bool get isKingSideCastle {
+    if (piece != PieceType.king) return false;
+    final departure = this.departure;
+    if (departure is! Square || departure.file != File.e) return false;
+    return destination.file == File.g;
+  }
+
+  bool get isQueenSideCastle {
+    if (piece != PieceType.king) return false;
+    final departure = this.departure;
+    if (departure is! Square || departure.file != File.e) return false;
+    return destination.file == File.c;
+  }
+
+  String get notation {
+    final sb = StringBuffer();
+
+    if (isKingSideCastle) {
+      sb.write('O-O');
+    } else if (isQueenSideCastle) {
+      sb.write('O-O-O');
+    } else {
+      if (piece != PieceType.pawn) {
+        sb.write(piece.toUpperCase());
+      }
+      if (departure != null) {
+        sb.write(departure!.notation);
+      }
+      if (capture) {
+        sb.write('x');
+      }
+    }
+    sb.write(destination.notation);
+    if (promotion != null) {
+      sb.write('=${promotion!.notation}');
+    }
+    if (checkMate) {
+      sb.write('#');
+    } else if (check) {
+      sb.write('+');
+    }
+
+    return sb.toString();
+  }
 }

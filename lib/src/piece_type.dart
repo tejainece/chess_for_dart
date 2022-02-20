@@ -1,4 +1,4 @@
-import 'package:chess_for_dart/chess_for_dart.dart';
+import 'package:chess_for_dart/src/game.dart';
 import 'package:chess_for_dart/src/square.dart';
 
 enum Side { white, black }
