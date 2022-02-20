@@ -14,8 +14,8 @@ abstract class Piece {
   String get notation =>
       color == Side.white ? type.toUpperCase() : type.toLowerCase();
 
-  List<Move> findMoves(Board board, Square departure, Side turn) =>
-      type.findMoves(board, departure, turn);
+  List<Move> findMoves(Board board, Square departure) =>
+      type.findMoves(board, departure, color);
 
   @override
   String toString() => symbol;

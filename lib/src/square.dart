@@ -108,13 +108,13 @@ class Square {
 
   String get notation => '${file.notation}${rank.notation}';
 
-  Square? operator+(Direction direction) {
+  Square? operator +(Direction direction) {
     final newFile = file + direction.y;
-    if(newFile == null) {
+    if (newFile == null) {
       return null;
     }
     final newRank = rank + direction.x;
-    if(newRank == null) {
+    if (newRank == null) {
       return null;
     }
     return Square(newFile, newRank);
@@ -226,7 +226,20 @@ class Direction {
   static const w = Direction._('w', Point(-1, 0));
   static const nw = Direction._('nw', Point(-1, 1));
 
+  static const nne = Direction._('nne', Point(1, 2));
+  static const ene = Direction._('ene', Point(2, 1));
+  static const ese = Direction._('ese', Point(2, -1));
+  static const sse = Direction._('sse', Point(1, -2));
+  static const ssw = Direction._('ssw', Point(-1, -2));
+  static const wsw = Direction._('wsw', Point(-2, -1));
+  static const wnw = Direction._('wnw', Point(-2, 1));
+  static const nnw = Direction._('nnw', Point(-1, 2));
+
   static const diagonals = [ne, se, sw, nw];
+
+  static const adjacents = [n, e, s, w];
+
+  static const knight = [nne, ene, ese, sse, ssw, wsw, wnw, nnw];
 }
 
 class Move {
@@ -238,10 +251,10 @@ class Move {
 
   Move(
       {required this.turn,
-        required this.piece,
-        required this.departure,
-        required this.destination,
-        required this.capture});
+      required this.piece,
+      required this.departure,
+      required this.destination,
+      required this.capture});
 
   String notation() =>
       '${piece.notation.toUpperCase()}${departure.notation}${capture ? 'x' : ''}${destination.notation}';
