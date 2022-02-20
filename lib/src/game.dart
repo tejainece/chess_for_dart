@@ -129,21 +129,3 @@ class Board {
     return sb.toString();
   }
 }
-
-class Move {
-  final Side turn;
-  final PieceType piece;
-  final Square departure;
-  final Square destination;
-  final bool capture;
-
-  Move(
-      {required this.turn,
-      required this.piece,
-      required this.departure,
-      required this.destination,
-      required this.capture});
-
-  String notation() =>
-      '${piece.notation.toUpperCase()}${departure.notation}${capture ? 'x' : ''}${destination.notation}';
-}

@@ -1,3 +1,5 @@
+import 'package:chess_for_dart/chess_for_dart.dart';
+
 enum Side { white, black }
 
 abstract class PieceType {
@@ -8,6 +10,8 @@ abstract class PieceType {
   String toString() => name;
   String toLowerCase() => notation;
   String toUpperCase() => notation.toUpperCase();
+
+  List<Move> findMoves(Board board, Square departure, Side turn);
 
   static const king = King._();
   static const queen = Queen._();
@@ -39,7 +43,11 @@ class King with PieceType {
 
   factory King() => PieceType.king;
 
-
+  @override
+  List<Move> findMoves(Board board, Square departure, Side turn) {
+    // TODO
+    throw UnimplementedError();
+  }
 }
 
 class Queen with PieceType {
@@ -51,6 +59,12 @@ class Queen with PieceType {
   const Queen._();
 
   factory Queen() => PieceType.queen;
+
+  @override
+  List<Move> findMoves(Board board, Square departure, Side turn) {
+    // TODO
+    throw UnimplementedError();
+  }
 }
 
 class Rook with PieceType {
@@ -62,6 +76,12 @@ class Rook with PieceType {
   const Rook._();
 
   factory Rook() => PieceType.rook;
+
+  @override
+  List<Move> findMoves(Board board, Square departure, Side turn) {
+    // TODO
+    throw UnimplementedError();
+  }
 }
 
 class Bishop with PieceType {
@@ -73,6 +93,46 @@ class Bishop with PieceType {
   const Bishop._();
 
   factory Bishop() => PieceType.bishop;
+
+  @override
+  List<Move> findMoves(Board board, Square departure, Side turn) {
+    final ret = <Move>[];
+
+    outer:
+    for (final dir in Direction.diagonals) {
+      for (Square? tracker = departure + dir;
+          tracker != null;
+          tracker = tracker + dir) {
+        final piece = board[tracker];
+
+        if (piece == null) {
+          ret.add(Move(
+              turn: turn,
+              piece: this,
+              departure: departure,
+              destination: tracker,
+              capture: false));
+          continue;
+        }
+
+        if (piece.color == turn) {
+          continue outer;
+        } else if (piece.type == PieceType.king) {
+          continue outer;
+        }
+
+        ret.add(Move(
+            turn: turn,
+            piece: this,
+            departure: departure,
+            destination: tracker,
+            capture: true));
+        continue outer;
+      }
+    }
+
+    return ret;
+  }
 }
 
 class Knight with PieceType {
@@ -84,6 +144,12 @@ class Knight with PieceType {
   const Knight._();
 
   factory Knight() => PieceType.knight;
+
+  @override
+  List<Move> findMoves(Board board, Square departure, Side turn) {
+    // TODO
+    throw UnimplementedError();
+  }
 }
 
 class Pawn with PieceType {
@@ -95,4 +161,10 @@ class Pawn with PieceType {
   const Pawn._();
 
   factory Pawn() => PieceType.pawn;
+
+  @override
+  List<Move> findMoves(Board board, Square departure, Side turn) {
+    // TODO
+    throw UnimplementedError();
+  }
 }

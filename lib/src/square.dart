@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:chess_for_dart/src/piece_type.dart';
+
 class File {
   final String notation;
   const File._(this.notation);
@@ -223,8 +225,24 @@ class Direction {
   static const sw = Direction._('sw', Point(-1, -1));
   static const w = Direction._('w', Point(-1, 0));
   static const nw = Direction._('nw', Point(-1, 1));
+
+  static const diagonals = [ne, se, sw, nw];
 }
 
-/*enum Direction {
-  n, ne, e, se, s, sw, w, nw
-}*/
+class Move {
+  final Side turn;
+  final PieceType piece;
+  final Square departure;
+  final Square destination;
+  final bool capture;
+
+  Move(
+      {required this.turn,
+        required this.piece,
+        required this.departure,
+        required this.destination,
+        required this.capture});
+
+  String notation() =>
+      '${piece.notation.toUpperCase()}${departure.notation}${capture ? 'x' : ''}${destination.notation}';
+}

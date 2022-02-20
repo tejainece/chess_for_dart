@@ -1,4 +1,6 @@
+import 'package:chess_for_dart/src/game.dart';
 import 'package:chess_for_dart/src/piece_type.dart';
+import 'package:chess_for_dart/src/square.dart';
 
 export 'package:chess_for_dart/src/piece_type.dart';
 
@@ -11,6 +13,9 @@ abstract class Piece {
 
   String get notation =>
       color == Side.white ? type.toUpperCase() : type.toLowerCase();
+
+  List<Move> findMoves(Board board, Square departure, Side turn) =>
+      type.findMoves(board, departure, turn);
 
   @override
   String toString() => symbol;
