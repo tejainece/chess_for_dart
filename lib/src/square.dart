@@ -318,8 +318,11 @@ class SAN {
     } else if(san.startsWith('O-O')) {
       san = san.substring(3);
     } else {
-
+      if(san.startsWith(RegExp('[KQRBNP]'))) {
+        // TODO
+      }
     }
+    throw UnimplementedError();
   }
 
   bool get isKingSideCastle {
